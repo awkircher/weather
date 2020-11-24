@@ -1,0 +1,39 @@
+.darkestNight { /*12am to 2am*/
+    background: #201C2D;
+}
+
+.dustyPurple { /*2am to 4am, 10pm to midnight*/
+    background: #655C87;
+}
+
+.transitionPeach { /*4am to 6am, 2pm to 4pm*/
+    background: #F5DDC0;
+}
+
+.dawn { /*6am to 8am*/
+    background: #F5F0C0;
+}
+
+.morningYellow { /*8am to 10am*/
+    background: #F5ED9E;
+}
+
+.blueWhite { /*10am to noon*/
+    background: #ECF5FD;
+}
+
+.noonBlue { /*noon to 2pm*/
+    background: #C8E3FA;
+}
+
+.goldenHour { /*4pm to 6pm*/
+    background: #F1BF92;
+}
+
+.lightPurple { /*6pm to 8pm*/
+    background: #CDC1DF;
+}
+
+.middlePurple { /*8pm to 10pm*/
+    background: #AD99CE;
+}

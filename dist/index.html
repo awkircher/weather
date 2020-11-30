@@ -2,14 +2,16 @@
 <html>
     <head>
         <title>Feels like</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Inter&family=Spectral:ital,wght@0,200;0,400;1,400&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <div id="feelsLike">This is what the weather feels like</div>
-        <div id="actual">This is what the actual temperature is</div>
-        <div id="conditions">This is what the conditions are</div>
-        <div id="message">If there's an error...</div>
-        <form id="zipCodeForm">
+        <div id="feelsLike" class="serif">This is what the weather feels like</div>
+        <div id="actual" class="serif">This is what the actual temperature is</div>
+        <div id="conditions" class="serif">This is what the conditions are</div>
+        <div id="message" class="sans">If there's an error...</div>
+        <form id="zipCodeForm" class="sans">
             <input type="text" placeholder="zip code">
             <input type="submit" value="Update zip code">
         </form>

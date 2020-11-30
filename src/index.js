@@ -14,7 +14,10 @@ const Zip = function() {
         localStorage.setItem("zip", zip);
     };
     const get = function() {
-        const zip = localStorage.getItem("zip");
+        let zip = localStorage.getItem("zip");
+        if (!zip) {
+            zip = "10001";
+        }
         return zip;
     };
     return { set, get }
@@ -143,7 +146,7 @@ const Weather = function() {
         if (event != null) {
             zipCode = event.target[0].value;
             Zip.set(zipCode);
-        } else {
+        } else { 
             zipCode = Zip.get();
         }
         const appId = process.env.KEY;

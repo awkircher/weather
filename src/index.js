@@ -1,3 +1,5 @@
+import * as data from "./database.json";
+
 const feelsLike = document.querySelector('#feelsLike');
 const actual = document.querySelector('#actual');
 const conditions = document.querySelector('#conditions');
@@ -33,6 +35,7 @@ const Weather = function() {
             feelsLike.textContent=`${weatherData.main.feels_like}`;
             actual.textContent=`${weatherData.main.temp}`;
             conditions.textContent=`${weatherData.weather[0].description}`
+            View.setImage();
         } catch {
             messEl.textContent="Oops, something went wrong. Try another zip code!";
         }
@@ -43,6 +46,12 @@ const Weather = function() {
 
 //wrap in a view object, with setBackground and setImage methods
 const View = function() {
+    const setImage = function() {
+        const src = data['2'].src;
+        const img = document.createElement("img");
+        img.setAttribute("src", `${src}`);
+        conditions.appendChild(img);
+    }
     const setBackground = function(timeOfDay) {
         const body = document.body;
         switch(true) {
@@ -108,7 +117,7 @@ const View = function() {
                 break;
         }
     }
-    return { setBackground };
+    return { setBackground, setImage };
 }();
 
 form.addEventListener("submit", function(event) {

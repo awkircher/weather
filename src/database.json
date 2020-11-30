@@ -1,0 +1,31 @@
+{
+    "2": {
+        "condition": "Thunderstorm",
+        "src": "images/rain.svg"
+    },
+    "3": {
+        "condition": "Drizzle",
+        "src": "images/rain.svg"
+    },
+    "5": {
+        "condition": "Rain",
+        "src": "images/rain.svg"
+    },
+    "6": {
+        "condition": "Snow",
+        "src": "images/snow.svg"
+    },
+    "7": {
+        "condition": "Atmosphere",
+        "src": "images/mist.svg"
+    },
+    "800": {
+        "condition": "Clear",
+        "src_day": "images/sun.svg",
+        "src_night": "images/moon.svg"
+    },
+    "8": {
+        "condition": "Clouds",
+        "src": "images/cloud.svg"
+    }
+}

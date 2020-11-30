@@ -5,6 +5,9 @@ const actual = document.querySelector('#actual');
 const conditions = document.querySelector('#conditions');
 const form = document.querySelector('#zipCodeForm');
 const messEl = document.querySelector('#message');
+const zipEl = document.querySelector('#zip');
+const updateButton = document.querySelector('#change');
+const currentZip = document.querySelector('#current');
 
 const Zip = function() {
     const set = function(zip) {
@@ -18,6 +21,10 @@ const Zip = function() {
 }();
 
 const View = function() {
+    const showHide = function() {
+        form.classList.toggle('hidden');
+        currentZip.classList.toggle('hidden');
+    }
     const setImage = function(code) {
         console.log(`you called setImage with code ${code}`);
         code = code.toString();
@@ -54,11 +61,12 @@ const View = function() {
         img.setAttribute("id", "icon");
         conditions.appendChild(img);
     }
-    const update = function(data) {
+    const update = function(data, zip) {
         messEl.textContent="";
         data.main.feels_like ? feelsLike.textContent=`${data.main.feels_like}`:feelsLike.textContent="Unavailable";
         data.main.temp ? actual.textContent=`${data.main.temp}`:actual.textContent="Unavailable";
         data.weather[0].description ? conditions.textContent=`${data.weather[0].description}`:conditions.textContent="Unavailable";
+        zipEl.textContent=zip;
         setImage(data.weather[0].id);
     }
     const setBackground = function(timeOfDay) {
@@ -126,7 +134,7 @@ const View = function() {
                 break;
         }
     }
-    return { setBackground, update };
+    return { setBackground, update, showHide };
 }();
 
 const Weather = function() {
@@ -149,15 +157,19 @@ const Weather = function() {
             console.error(error);
             messEl.textContent=`${error}`;
         }
-        View.update(weatherData);
+        View.update(weatherData, zipCode);
+        console.log(weatherData);
     };
     return { get };
 }();
 
 form.addEventListener("submit", function(event) {
     event.preventDefault();
+    View.showHide();
     Weather.get(event);
 });
+
+updateButton.addEventListener("click", View.showHide);
 
 View.setBackground(new Date().getHours());
 Weather.get(null);

@@ -66,8 +66,8 @@ const View = function() {
     }
     const update = function(data, zip) {
         messEl.textContent="";
-        data.main.feels_like ? feelsLike.textContent=`${data.main.feels_like}`:feelsLike.textContent="Unavailable";
-        data.main.temp ? actual.textContent=`${data.main.temp}`:actual.textContent="Unavailable";
+        data.main.feels_like ? feelsLike.textContent=`${Math.round(data.main.feels_like)}`:feelsLike.textContent="Unavailable";
+        data.main.temp ? actual.textContent=`${Math.round(data.main.temp)}`:actual.textContent="Unavailable";
         data.weather[0].description ? conditions.textContent=`${data.weather[0].description}`:conditions.textContent="Unavailable";
         zipEl.textContent=zip;
         setImage(data.weather[0].id);
@@ -161,7 +161,6 @@ const Weather = function() {
             messEl.textContent=`${error}`;
         }
         View.update(weatherData, zipCode);
-        console.log(weatherData);
     };
     return { get };
 }();

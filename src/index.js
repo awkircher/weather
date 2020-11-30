@@ -3,6 +3,7 @@ import * as data from "./database.json";
 const feelsLike = document.querySelector('#feelsLike');
 const actual = document.querySelector('#actual');
 const conditions = document.querySelector('#conditions');
+const description = document.querySelector('#description');
 const form = document.querySelector('#zipCodeForm');
 const messEl = document.querySelector('#message');
 const zipEl = document.querySelector('#zip');
@@ -29,7 +30,6 @@ const View = function() {
         currentZip.classList.toggle('hidden');
     }
     const setImage = function(code) {
-        console.log(`you called setImage with code ${code}`);
         code = code.toString();
         const img = document.createElement("img");
         let src;
@@ -62,13 +62,13 @@ const View = function() {
             }
         img.setAttribute("src", `${src}`);
         img.setAttribute("id", "icon");
-        conditions.appendChild(img);
+        conditions.insertBefore(img, description);
     }
     const update = function(data, zip) {
         messEl.textContent="";
         data.main.feels_like ? feelsLike.textContent=`${Math.round(data.main.feels_like)}`:feelsLike.textContent="Unavailable";
         data.main.temp ? actual.textContent=`${Math.round(data.main.temp)}`:actual.textContent="Unavailable";
-        data.weather[0].description ? conditions.textContent=`${data.weather[0].main}`:conditions.textContent="Unavailable";
+        data.weather[0].description ? description.textContent=`${data.weather[0].main}`:description.textContent="Unavailable";
         zipEl.textContent=zip;
         setImage(data.weather[0].id);
     }

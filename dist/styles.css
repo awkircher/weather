@@ -2,6 +2,10 @@ body {
     text-align: center;
 }
 
+#conditions span {
+    display: block;
+}
+
 .hidden {
     visibility: hidden;
     height: 0 !important;

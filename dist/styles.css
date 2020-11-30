@@ -1,5 +1,19 @@
 body {
     text-align: center;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+}
+
+#container {
+    display: flex;
+    align-items: center;
+    width: 270px;
+    flex-wrap: wrap;
+}
+
+#inputContainer {
+    align-self: flex-end;
 }
 
 #conditions span {

@@ -7,21 +7,27 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <div id="conditions" class="serif little-serif">
-            <img id="icon">
-            <span id="description"></span>
+        <div id="container">
+            <div id="weatherContainer">
+                <div id="conditions" class="serif little-serif">
+                    <img id="icon">
+                    <span id="description"></span>
+                </div>
+                <div class="serif big-serif">Feels like <span id="feelsLike"></span></div>
+                <div class="serif little-serif">Actually <span id="actual"></span></div>
+            </div>
+            <div id="inputContainer">
+                <div id="message" class="sans">If there's an error...</div>
+                <div id="current" class="sans">
+                    <div id="zip"></div>
+                    <button id="change">Change zip code</button>
+                </div>
+                <form id="zipCodeForm" class="sans hidden">
+                    <input type="text" placeholder="zip code">
+                    <input type="submit" value="Update zip code">
+                </form>
+            </div>
         </div>
-        <div class="serif big-serif">Feels like <span id="feelsLike"></span></div>
-        <div class="serif little-serif">Actually <span id="actual"></span></div>
-        <div id="message" class="sans">If there's an error...</div>
-        <div id="current" class="sans">
-            <div id="zip"></div>
-            <button id="change">Change zip code</button>
-        </div>
-        <form id="zipCodeForm" class="sans hidden">
-            <input type="text" placeholder="zip code">
-            <input type="submit" value="Update zip code">
-        </form>
         <script src="main.js"></script>
     </body>
 </html>

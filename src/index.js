@@ -50,7 +50,8 @@ const View = function() {
                 src = data['7'].src;
                 break;
             case code === '800':
-                if (Date().getHours() < 6 || Date().getHours() > 18) {
+                const time = new Date().getHours();
+                if (time < 6 || time > 18) {
                     src = data['800'].src_night;
                 } else {
                     src = data['800'].src_day;

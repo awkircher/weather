@@ -21,8 +21,8 @@
     },
     "800": {
         "condition": "Clear",
-        "src_day": "images/sun.svg",
-        "src_night": "images/moon.svg"
+        "src_day": "images/clear_day.svg",
+        "src_night": "images/clear_night.svg"
     },
     "8": {
         "condition": "Clouds",

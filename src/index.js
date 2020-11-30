@@ -17,38 +17,38 @@ const Zip = function() {
     return { set, get }
 }();
 
-const Weather = function() {
-    const get = async function(event) { 
-        let zipCode;
-        if (event != null) {
-            zipCode = event.target[0].value;
-            Zip.set(zipCode);
-        } else {
-            zipCode = Zip.get();
-        }
-        const appId = process.env.KEY;
-        const url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&units=imperial&appid=${appId}`
-        const response = await fetch(`${url}`, {mode: 'cors'});
-        const weatherData = await response.json();
-        try {
-            messEl.textContent="";
-            feelsLike.textContent=`${weatherData.main.feels_like}`;
-            actual.textContent=`${weatherData.main.temp}`;
-            conditions.textContent=`${weatherData.weather[0].description}`
-            View.setImage();
-        } catch {
-            messEl.textContent="Oops, something went wrong. Try another zip code!";
-        }
-    };
-    return { get };
-}();
-
-
-//wrap in a view object, with setBackground and setImage methods
 const View = function() {
-    const setImage = function() {
-        const src = data['2'].src;
+    const setImage = function(code) {
+        code = code.toString();
         const img = document.createElement("img");
+        let src;
+        switch(true) {
+            case code.startsWith('2'):
+                src = data['2'].src;
+                break;
+            case code.startsWith('3'):
+                src = data['3'].src;
+                break;
+            case code.startsWith('5'):
+                src = data['5'].src;
+                break;
+            case code.startsWith('6'):
+                src = data['6'].src;
+                break;
+            case code.startsWith('7'):
+                src = data['7'].src;
+                break;
+            case code === '800':
+                if (Date().getHours() < 6 || Date().getHours() > 18) {
+                    src = data['800'].src_night;
+                } else {
+                    src = data['800'].src_day;
+                }
+                break;
+            case code.startsWith('8'):
+                src = data['8'].src;
+                break;
+        }
         img.setAttribute("src", `${src}`);
         conditions.appendChild(img);
     }
@@ -119,6 +119,41 @@ const View = function() {
     }
     return { setBackground, setImage };
 }();
+
+const Weather = function() {
+    const get = async function(event) { 
+        let zipCode;
+        if (event != null) {
+            zipCode = event.target[0].value;
+            Zip.set(zipCode);
+        } else {
+            zipCode = Zip.get();
+        }
+        const appId = process.env.KEY;
+        const url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&units=imperial&appid=${appId}`
+        let response;
+        let weatherData;
+        try {
+            response = await fetch(`${url}`, {mode: 'cors'});
+            weatherData = await response.json();
+        } catch(error) {
+            console.log(error);
+        }
+        try {
+            messEl.textContent="";
+            feelsLike.textContent=`${weatherData.main.feels_like}`;
+            actual.textContent=`${weatherData.main.temp}`;
+            conditions.textContent=`${weatherData.weather[0].description}`
+            View.setImage(weatherData.weather[0].id);
+        } catch {
+            messEl.textContent="Oops, something went wrong. Try another zip code!";
+        }
+    };
+    return { get };
+}();
+
+
+//wrap in a view object, with setBackground and setImage methods
 
 form.addEventListener("submit", function(event) {
     event.preventDefault();

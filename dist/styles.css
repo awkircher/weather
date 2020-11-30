@@ -1,6 +1,19 @@
+body {
+    text-align: center;
+}
+
 .hidden {
     visibility: hidden;
     height: 0 !important;
+}
+
+.big-serif {
+    font-size: 48px;
+    letter-spacing: -1px;
+}
+
+.little-serif {
+    font-size: 20px;
 }
 
 .serif {

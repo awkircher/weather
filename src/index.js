@@ -19,6 +19,7 @@ const Zip = function() {
 
 const View = function() {
     const setImage = function(code) {
+        console.log(`you called setImage with code ${code}`);
         code = code.toString();
         const img = document.createElement("img");
         let src;
@@ -48,9 +49,17 @@ const View = function() {
             case code.startsWith('8'):
                 src = data['8'].src;
                 break;
-        }
+            }
         img.setAttribute("src", `${src}`);
+        img.setAttribute("id", "icon");
         conditions.appendChild(img);
+    }
+    const update = function(data) {
+        messEl.textContent="";
+        data.main.feels_like ? feelsLike.textContent=`${data.main.feels_like}`:feelsLike.textContent="Unavailable";
+        data.main.temp ? actual.textContent=`${data.main.temp}`:actual.textContent="Unavailable";
+        data.weather[0].description ? conditions.textContent=`${data.weather[0].description}`:conditions.textContent="Unavailable";
+        setImage(data.weather[0].id);
     }
     const setBackground = function(timeOfDay) {
         const body = document.body;
@@ -117,7 +126,7 @@ const View = function() {
                 break;
         }
     }
-    return { setBackground, setImage };
+    return { setBackground, update };
 }();
 
 const Weather = function() {
@@ -137,23 +146,13 @@ const Weather = function() {
             response = await fetch(`${url}`, {mode: 'cors'});
             weatherData = await response.json();
         } catch(error) {
-            console.log(error);
+            console.error(error);
+            messEl.textContent=`${error}`;
         }
-        try {
-            messEl.textContent="";
-            feelsLike.textContent=`${weatherData.main.feels_like}`;
-            actual.textContent=`${weatherData.main.temp}`;
-            conditions.textContent=`${weatherData.weather[0].description}`
-            View.setImage(weatherData.weather[0].id);
-        } catch {
-            messEl.textContent="Oops, something went wrong. Try another zip code!";
-        }
+        View.update(weatherData);
     };
     return { get };
 }();
-
-
-//wrap in a view object, with setBackground and setImage methods
 
 form.addEventListener("submit", function(event) {
     event.preventDefault();

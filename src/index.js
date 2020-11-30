@@ -31,7 +31,7 @@ const View = function() {
     }
     const setImage = function(code) {
         code = code.toString();
-        const img = document.createElement("img");
+        const img = document.querySelector("#icon");
         let src;
         switch(true) {
             case code.startsWith('2'):
@@ -61,8 +61,6 @@ const View = function() {
                 break;
             }
         img.setAttribute("src", `${src}`);
-        img.setAttribute("id", "icon");
-        conditions.insertBefore(img, description);
     }
     const update = function(data, zip) {
         messEl.textContent="";

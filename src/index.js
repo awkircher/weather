@@ -2,12 +2,15 @@ import { prefetch } from "webpack";
 import data from "./database.json";
 
 const feelsLike = document.querySelector('#feelsLike');
+const unitSymbol = document.querySelector('#feelsDeg');
 const actual = document.querySelector('#actual');
 const description = document.querySelector('#description');
 const form = document.querySelector('#zipCodeForm');
 const messEl = document.querySelector('#message');
 const zipEl = document.querySelector('#zip');
-const updateButton = document.querySelector('#change');
+const updateButton = document.querySelector('#change'); //change zip code button
+const switchButton = document.querySelector('#switch'); //switch units button
+const switchText = document.querySelector('#units'); //text on the switch button
 const currentZip = document.querySelector('#current');
 
 const Zip = function() {
@@ -24,29 +27,19 @@ const Zip = function() {
     return { set, get }
 }();
 
-const Temp = function() {
-    const set = function(c, f) {
-        console.log(`you called set with ${c} and ${f}`);
-        localStorage.setItem("celsius", JSON.stringify(c)); //c.feels and c.actual
-        localStorage.setItem("fahr", JSON.stringify(f)); //f.feels and f.actual
+const Data = function() {
+    const set = function(weatherData) {
+        localStorage.setItem("weather", JSON.stringify(weatherData)); //immediately store response in localStorage
     };
-    const convert = function(feels, actual) {
+    const convert = function(temp, units) {
         console.log('you called convert');
-        feels = Number(feels);
-        actual = Number(actual);
-        const feelsF = (((feels - 273.15) * 9)/5) + 32; //K to F
-        const actualF = (((actual - 273.15) * 9)/5) + 32; //K to F 
-        const feelsC = feels - 273.15; //K to C
-        const actualC = actual - 273.15; //K to C
-        const celsius = {
-            feels:feelsC, 
-            actual:actualC
+        temp = Number(temp);
+        if (units === 'C') {
+            temp = temp - 273.15; //K to C
+        } else {
+            temp = (((temp - 273.15) * 9)/5) + 32; //K to F
         };
-        const fahr = {
-            feels:feelsF, 
-            actual:actualF
-        };
-        set(celsius, fahr);
+        return temp;
     };
     const setUnitPref = function(preference) {
         localStorage.setItem("unit", preference);
@@ -56,18 +49,21 @@ const Temp = function() {
         let preference = localStorage.getItem("unit");
         if (!preference) {
             setUnitPref('F');
-            preference = getUnitPref();
         }
         return preference;
     };
     const get = function() {
-        console.log("you called get to get the right temperatures")
-        const preference = getUnitPref(); 
-        let temperatures = (preference === 'C') ? JSON.parse(localStorage.getItem("celsius")) : JSON.parse(localStorage.getItem("fahr"));
-        console.log(`${temperatures} are the temperatures`);
-        return temperatures;
+        const retrievedData = JSON.parse(localStorage.getItem('weather'));
+        let feels = retrievedData.main.feels_like;
+        let actual = retrievedData.main.temp;
+        const conditions = retrievedData.weather[0].main;
+        const imageId = retrievedData.weather[0].id;
+        const units = getUnitPref(); //returns user preference, or sets to and returns F if nothing stored
+        feels = convert(feels, units);
+        actual = convert(actual, units);
+        return {feels, actual, conditions, imageId, units};
     };
-    return { convert, get, setUnitPref }
+    return { get, set, getUnitPref, setUnitPref }
 }();
 
 const View = function() {
@@ -110,17 +106,17 @@ const View = function() {
         img.setAttribute("src", `${src}`);
     }
     const update = function(data, zip) {
-        let temperatures;
-        if (data) { //if response was 200, get the converted temps in user preferred units
-            Temp.convert(data.main.feels_like, data.main.temp);
-            temperatures = Temp.get();
-            console.log(`the update function thinks ${temperatures.feels}`);
+        let weather;
+        if (data) { //if response was 200, get the converted temps in user preferred units and image code
+            weather = Data.get();
         }
-        feelsLike.textContent = data ? `${Math.round(temperatures.feels)}` : feelsLike.textContent="~";
-        actual.textContent = data ? `${Math.round(temperatures.actual)}` : actual.textContent="~";
-        description.textContent = data ? `${data.weather[0].main}` : description.textContent="Unable to show conditions";
+        feelsLike.textContent = data ? `${Math.round(weather.feels)}` : feelsLike.textContent="~";
+        actual.textContent = data ? `${Math.round(weather.actual)}` : actual.textContent="~";
+        description.textContent = data ? `${weather.conditions}` : description.textContent="Unable to show conditions";
         zipEl.textContent = zip;
-        setImage(data.weather[0].id);
+        switchText.textContent = (weather.units === 'C') ? "Fahrenheit" : "Celsius"; //button shows opposite of what's in localStorage
+        unitSymbol.textContent = (weather.units === 'C') ? "C" : "F"; //display matches what's in localStorage
+        setImage(weather.imageId);
     }
     const setBackground = function(timeOfDay) {
         const body = document.body;
@@ -193,10 +189,10 @@ const View = function() {
 const Weather = function() {
     const get = async function(event) { 
         let zipCode;
-        if (event != null) {
+        if (event != null) { //means this call is happening because a new zip code was entered
             zipCode = event.target[0].value;
             Zip.set(zipCode);
-        } else { 
+        } else { //means this call is happening because the page was loaded
             zipCode = Zip.get();
         }
         const appId = process.env.KEY;
@@ -208,12 +204,13 @@ const Weather = function() {
             weatherData = await response.json();
             if (weatherData.cod == '200') {
                 messEl.textContent="";
-                View.update(weatherData, zipCode);
+                Data.set(weatherData);
+                View.update(true, zipCode); //View should update with localStorage data
             }
             else throw weatherData.message;
         } catch(error) {
             messEl.textContent=`${error}`;
-            View.update(null, zipCode);
+            View.update(null, zipCode); //call was bad, View should update with error messages
         }
     };
     return { get };
@@ -224,8 +221,12 @@ form.addEventListener("submit", function(event) {
     View.showHide();
     Weather.get(event);
 });
-
 updateButton.addEventListener("click", View.showHide);
+switchButton.addEventListener("click", function() {
+    const current = Data.getUnitPref();
+    (current === 'C') ? Data.setUnitPref('F') : Data.setUnitPref('C');
+    View.update(true, Zip.get());
+});
 
 View.setBackground(new Date().getHours());
 Weather.get(null);

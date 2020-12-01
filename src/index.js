@@ -66,7 +66,7 @@ const View = function() {
         messEl.textContent="";
         data.main.feels_like ? feelsLike.textContent=`${Math.round(data.main.feels_like)}`:feelsLike.textContent="Unavailable";
         data.main.temp ? actual.textContent=`${Math.round(data.main.temp)}`:actual.textContent="Unavailable";
-        data.weather[0].description ? description.textContent=`${data.weather[0].main}`:description.textContent="Unavailable";
+        data.weather[0].main ? description.textContent=`${data.weather[0].main}`:description.textContent="Unavailable";
         zipEl.textContent=zip;
         setImage(data.weather[0].id);
     }
@@ -153,12 +153,16 @@ const Weather = function() {
         let weatherData;
         try {
             response = await fetch(`${url}`, {mode: 'cors'});
+            console.log(1);
             weatherData = await response.json();
+            if (weatherData.cod == '200') {
+                View.update(weatherData, zipCode);
+            }
+            if (weatherData.cod == '404') throw weatherData.message;
         } catch(error) {
             console.error(error);
             messEl.textContent=`${error}`;
         }
-        View.update(weatherData, zipCode);
     };
     return { get };
 }();

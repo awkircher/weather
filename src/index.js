@@ -153,14 +153,12 @@ const Weather = function() {
         let weatherData;
         try {
             response = await fetch(`${url}`, {mode: 'cors'});
-            console.log(1);
             weatherData = await response.json();
             if (weatherData.cod == '200') {
                 View.update(weatherData, zipCode);
             }
-            if (weatherData.cod == '404') throw weatherData.message;
+            else throw weatherData.message;
         } catch(error) {
-            console.error(error);
             messEl.textContent=`${error}`;
         }
     };

@@ -13,14 +13,17 @@
                     <img id="icon">
                     <span id="description"></span>
                 </div>
-                <div class="serif big-serif">Feels like <span id="feelsLike"></span></div>
-                <div class="serif little-serif">Actually <span id="actual"></span></div>
+                <div class="serif big-serif">Feels like <span id="feelsLike"></span>&deg;</div>
+                <div class="serif little-serif">Actually <span id="actual"></span>&deg;</div>
             </div>
             <div id="inputContainer">
                 <div id="message" class="sans">If there's an error...</div>
                 <div id="current" class="sans">
-                    <div id="zip"></div>
+                    <div>Showing weather for <span id="zip"></span></div>
+                </div>
+                <div id="controls" class="sans">
                     <button id="change">Change zip code</button>
+                    <button id="switch">Switch to <span id="units">Celsius</span></button>
                 </div>
                 <form id="zipCodeForm" class="sans hidden">
                     <input type="text" name="zip" pattern="\d{5}" placeholder="Zip code" maxlength="5">

@@ -1,8 +1,7 @@
-import * as data from "./database.json";
+import data from "./database.json";
 
 const feelsLike = document.querySelector('#feelsLike');
 const actual = document.querySelector('#actual');
-const conditions = document.querySelector('#conditions');
 const description = document.querySelector('#description');
 const form = document.querySelector('#zipCodeForm');
 const messEl = document.querySelector('#message');

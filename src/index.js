@@ -192,7 +192,7 @@ const Weather = function() {
         if (event != null) { //means this call is happening because a new zip code was entered
             zipCode = event.target[0].value;
             Zip.set(zipCode);
-        } else { //means this call is happening because the page was loaded
+        } else { //means this call is happening because the page was loaded or auto refresh
             zipCode = Zip.get();
         }
         const appId = process.env.KEY;
@@ -230,3 +230,6 @@ switchButton.addEventListener("click", function() {
 
 View.setBackground(new Date().getHours());
 Weather.get(null);
+setInterval(function(){
+    Weather.get(null)
+},480000); //updates the weather every 8 minutes

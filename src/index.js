@@ -1,3 +1,4 @@
+import { prefetch } from "webpack";
 import data from "./database.json";
 
 const feelsLike = document.querySelector('#feelsLike');
@@ -21,6 +22,52 @@ const Zip = function() {
         return zip;
     };
     return { set, get }
+}();
+
+const Temp = function() {
+    const set = function(c, f) {
+        console.log(`you called set with ${c} and ${f}`);
+        localStorage.setItem("celsius", JSON.stringify(c)); //c.feels and c.actual
+        localStorage.setItem("fahr", JSON.stringify(f)); //f.feels and f.actual
+    };
+    const convert = function(feels, actual) {
+        console.log('you called convert');
+        feels = Number(feels);
+        actual = Number(actual);
+        const feelsF = (((feels - 273.15) * 9)/5) + 32; //K to F
+        const actualF = (((actual - 273.15) * 9)/5) + 32; //K to F 
+        const feelsC = feels - 273.15; //K to C
+        const actualC = actual - 273.15; //K to C
+        const celsius = {
+            feels:feelsC, 
+            actual:actualC
+        };
+        const fahr = {
+            feels:feelsF, 
+            actual:actualF
+        };
+        set(celsius, fahr);
+    };
+    const setUnitPref = function(preference) {
+        localStorage.setItem("unit", preference);
+    };
+    const getUnitPref = function() {
+        console.log("you called getUnitPref");
+        let preference = localStorage.getItem("unit");
+        if (!preference) {
+            setUnitPref('F');
+            preference = getUnitPref();
+        }
+        return preference;
+    };
+    const get = function() {
+        console.log("you called get to get the right temperatures")
+        const preference = getUnitPref(); 
+        let temperatures = (preference === 'C') ? JSON.parse(localStorage.getItem("celsius")) : JSON.parse(localStorage.getItem("fahr"));
+        console.log(`${temperatures} are the temperatures`);
+        return temperatures;
+    };
+    return { convert, get, setUnitPref }
 }();
 
 const View = function() {
@@ -63,8 +110,14 @@ const View = function() {
         img.setAttribute("src", `${src}`);
     }
     const update = function(data, zip) {
-        feelsLike.textContent = data ? `${Math.round(data.main.feels_like)}` : feelsLike.textContent="~";
-        actual.textContent = data ? `${Math.round(data.main.temp)}` : actual.textContent="~";
+        let temperatures;
+        if (data) { //if response was 200, get the converted temps in user preferred units
+            Temp.convert(data.main.feels_like, data.main.temp);
+            temperatures = Temp.get();
+            console.log(`the update function thinks ${temperatures.feels}`);
+        }
+        feelsLike.textContent = data ? `${Math.round(temperatures.feels)}` : feelsLike.textContent="~";
+        actual.textContent = data ? `${Math.round(temperatures.actual)}` : actual.textContent="~";
         description.textContent = data ? `${data.weather[0].main}` : description.textContent="Unable to show conditions";
         zipEl.textContent = zip;
         setImage(data.weather[0].id);
@@ -147,7 +200,7 @@ const Weather = function() {
             zipCode = Zip.get();
         }
         const appId = process.env.KEY;
-        const url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&units=imperial&appid=${appId}`
+        const url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&appid=${appId}`
         let response;
         let weatherData;
         try {

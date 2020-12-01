@@ -63,11 +63,10 @@ const View = function() {
         img.setAttribute("src", `${src}`);
     }
     const update = function(data, zip) {
-        messEl.textContent="";
-        data.main.feels_like ? feelsLike.textContent=`${Math.round(data.main.feels_like)}`:feelsLike.textContent="Unavailable";
-        data.main.temp ? actual.textContent=`${Math.round(data.main.temp)}`:actual.textContent="Unavailable";
-        data.weather[0].main ? description.textContent=`${data.weather[0].main}`:description.textContent="Unavailable";
-        zipEl.textContent=zip;
+        feelsLike.textContent = data ? `${Math.round(data.main.feels_like)}` : feelsLike.textContent="~";
+        actual.textContent = data ? `${Math.round(data.main.temp)}` : actual.textContent="~";
+        description.textContent = data ? `${data.weather[0].main}` : description.textContent="Unable to show conditions";
+        zipEl.textContent = zip;
         setImage(data.weather[0].id);
     }
     const setBackground = function(timeOfDay) {
@@ -155,11 +154,13 @@ const Weather = function() {
             response = await fetch(`${url}`, {mode: 'cors'});
             weatherData = await response.json();
             if (weatherData.cod == '200') {
+                messEl.textContent="";
                 View.update(weatherData, zipCode);
             }
             else throw weatherData.message;
         } catch(error) {
             messEl.textContent=`${error}`;
+            View.update(null, zipCode);
         }
     };
     return { get };

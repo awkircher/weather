@@ -13,7 +13,7 @@ module.exports = {
     fallback: {
       path: require.resolve("path-browserify"),
       fs: require.resolve("path-browserify"),
-      util: require.resolve("/util")
+      util: require.resolve("util/")
     }
   },
   plugins: [

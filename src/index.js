@@ -1,6 +1,8 @@
 import { prefetch } from "webpack";
 import data from "./database.json";
 
+const loader = document.querySelector('#loader');
+const weatherContainer = document.querySelector('#weatherContainer');
 const feelsLike = document.querySelector('#feelsLike');
 const unitSymbol = document.querySelector('#feelsDeg');
 const actual = document.querySelector('#actual');
@@ -67,7 +69,7 @@ const Data = function() {
 }();
 
 const View = function() {
-    const showHide = function() {
+    const showHideForm = function() {
         form.classList.toggle('hidden');
         currentZip.classList.toggle('hidden');
     }
@@ -106,6 +108,8 @@ const View = function() {
         img.setAttribute("src", `${src}`);
     }
     const update = function(data, zip) {
+        weatherContainer.classList = 'hidden';
+        loader.classList = '';
         let weather;
         if (data) { //if response was 200, get the converted temps in user preferred units and image code
             weather = Data.get();
@@ -117,6 +121,8 @@ const View = function() {
         switchText.textContent = (weather.units === 'C') ? "Fahrenheit" : "Celsius"; //button shows opposite of what's in localStorage
         unitSymbol.textContent = (weather.units === 'C') ? "C" : "F"; //display matches what's in localStorage
         setImage(weather.imageId);
+        loader.classList = 'hidden';
+        weatherContainer.classList = '';
     }
     const setBackground = function(timeOfDay) {
         const body = document.body;
@@ -183,7 +189,7 @@ const View = function() {
                 break;
         }
     }
-    return { setBackground, update, showHide };
+    return { setBackground, update, showHideForm };
 }();
 
 const Weather = function() {
@@ -218,10 +224,10 @@ const Weather = function() {
 
 form.addEventListener("submit", function(event) {
     event.preventDefault();
-    View.showHide();
+    View.showHideForm();
     Weather.get(event);
 });
-updateButton.addEventListener("click", View.showHide);
+updateButton.addEventListener("click", View.showHideForm);
 switchButton.addEventListener("click", function() {
     const current = Data.getUnitPref();
     (current === 'C') ? Data.setUnitPref('F') : Data.setUnitPref('C');
@@ -230,6 +236,7 @@ switchButton.addEventListener("click", function() {
 
 View.setBackground(new Date().getHours());
 Weather.get(null);
-setInterval(function(){
+setInterval(function() {
+    View.setBackground(new Date().getHours());
     Weather.get(null)
-},480000); //updates the weather every 8 minutes
+}, 480000); //updates the weather every 8 minutes

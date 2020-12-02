@@ -77,6 +77,16 @@ const View = function() {
         currentZip.classList.toggle('hidden');
         buttonGroup.classList.toggle('hidden');
     }
+    const showLoader = function() {
+        container.classList = 'hidden';
+        document.body.classList = ''; //returns the body to its default color to match loader
+        loader.classList = ''; //makes sure loader is visible
+    }
+    const hideLoader = function() {
+        //background color determined in the main update
+        loader.classList = 'hidden';
+        container.classList = ''; //makes sure loader is visible
+    }
     const setImage = function(code) {
         code = code.toString();
         const img = document.querySelector("#icon");
@@ -112,8 +122,6 @@ const View = function() {
         img.setAttribute("src", `${src}`);
     }
     const update = function(data, zip) {
-        container.classList = 'hidden';
-        loader.classList = '';
         let weather;
         if (data) { //if response was 200, get the converted temps in user preferred units and image code
             weather = Data.get();
@@ -122,17 +130,13 @@ const View = function() {
         actual.textContent = data ? `${Math.round(weather.actual)}` : actual.textContent="~";
         description.textContent = data ? `${weather.conditions}` : description.textContent="Unable to show conditions";
         zipEl.textContent = zip;
-        if (weather) {
+        if (weather) { //if undefined, these DOM elements should just look empty
             switchText.textContent = (weather.units === 'C') ? "Fahrenheit" : "Celsius"; //button shows opposite of what's in localStorage
             unitSymbol.textContent = (weather.units === 'C') ? "C" : "F"; //display matches what's in localStorage
-            console.log("finished textContent");
             setImage(weather.imageId);
-            console.log("finished weather image");
         }
         setBackground(new Date().getHours());
-        console.log("finished background color");
-        loader.classList = 'hidden';
-        container.classList = '';
+        hideLoader();
     }
     const setBackground = function(timeOfDay) {
         const body = document.body;
@@ -199,7 +203,7 @@ const View = function() {
                 break;
         }
     }
-    return { update, showHideForm };
+    return { update, showHideForm, showLoader };
 }();
 
 const Weather = function() {
@@ -216,6 +220,7 @@ const Weather = function() {
         let response;
         let weatherData;
         try {
+            View.showLoader();
             response = await fetch(`${url}`, {mode: 'cors'});
             weatherData = await response.json();
             if (weatherData.cod == '200') {

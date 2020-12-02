@@ -2,7 +2,7 @@ import { prefetch } from "webpack";
 import data from "./database.json";
 
 const loader = document.querySelector('#loader');
-const weatherContainer = document.querySelector('#weatherContainer');
+const container = document.querySelector('#container');
 const feelsLike = document.querySelector('#feelsLike');
 const unitSymbol = document.querySelector('#feelsDeg');
 const actual = document.querySelector('#actual');
@@ -108,7 +108,7 @@ const View = function() {
         img.setAttribute("src", `${src}`);
     }
     const update = function(data, zip) {
-        weatherContainer.classList = 'hidden';
+        container.classList = 'hidden';
         loader.classList = '';
         let weather;
         if (data) { //if response was 200, get the converted temps in user preferred units and image code
@@ -122,7 +122,7 @@ const View = function() {
         unitSymbol.textContent = (weather.units === 'C') ? "C" : "F"; //display matches what's in localStorage
         setImage(weather.imageId);
         loader.classList = 'hidden';
-        weatherContainer.classList = '';
+        container.classList = '';
     }
     const setBackground = function(timeOfDay) {
         const body = document.body;

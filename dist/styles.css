@@ -48,6 +48,10 @@ button, input[type=submit] {
     align-self: flex-end;
 }
 
+#conditions {
+    margin-bottom: 54px;
+}
+
 #conditions span {
     display: block;
 }

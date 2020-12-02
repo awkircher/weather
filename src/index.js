@@ -7,13 +7,16 @@ const feelsLike = document.querySelector('#feelsLike');
 const unitSymbol = document.querySelector('#feelsDeg');
 const actual = document.querySelector('#actual');
 const description = document.querySelector('#description');
-const form = document.querySelector('#zipCodeForm');
+const form = document.querySelector('#zipCodeForm form');
+const formContainer = document.querySelector('#zipCodeForm');
 const messEl = document.querySelector('#message');
-const zipEl = document.querySelector('#zip');
+const buttonGroup = document.querySelector('#controls');
+const cancelButton = document.querySelector('#cancel');
 const updateButton = document.querySelector('#change'); //change zip code button
 const switchButton = document.querySelector('#switch'); //switch units button
 const switchText = document.querySelector('#units'); //text on the switch button
-const currentZip = document.querySelector('#current');
+const currentZip = document.querySelector('#current'); //text that says "Showing weather for..."
+const zipEl = document.querySelector('#zip'); //span that holds the current zip code
 
 const Zip = function() {
     const set = function(zip) {
@@ -70,8 +73,9 @@ const Data = function() {
 
 const View = function() {
     const showHideForm = function() {
-        form.classList.toggle('hidden');
+        formContainer.classList.toggle('hidden');
         currentZip.classList.toggle('hidden');
+        buttonGroup.classList.toggle('hidden');
     }
     const setImage = function(code) {
         code = code.toString();
@@ -223,19 +227,21 @@ const Weather = function() {
     return { get };
 }();
 
-form.addEventListener("submit", function(event) {
-    event.preventDefault();
-    View.showHideForm();
-    Weather.get(event);
-});
 updateButton.addEventListener("click", View.showHideForm);
+cancelButton.addEventListener("click", View.showHideForm);
 switchButton.addEventListener("click", function() {
     const current = Data.getUnitPref();
     (current === 'C') ? Data.setUnitPref('F') : Data.setUnitPref('C');
     View.update(true, Zip.get());
 });
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    View.showHideForm();
+    Weather.get(event);
+});
+
 
 Weather.get(null);
 setInterval(function() {
-    Weather.get(null)
+    Weather.get(null);
 }, 480000); //updates the weather every 8 minutes

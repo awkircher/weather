@@ -36,10 +36,13 @@
                     <button id="change">Change zip code</button>
                     <button id="switch">Switch to <span id="units"></span></button>
                 </div>
-                <form id="zipCodeForm" class="sans hidden">
-                    <input type="text" name="zip" pattern="\d{5}" placeholder="Zip code" maxlength="5">
-                    <input type="submit" value="Update zip code">
-                </form>
+                <div id="zipCodeForm" class="sans hidden">
+                    <form>
+                        <input type="text" name="zip" pattern="\d{5}" placeholder="Zip code" maxlength="5">
+                        <input type="submit" value="Update zip code">
+                    </form>
+                    <button id="cancel">Cancel</button>
+                </div>
             </div>
         </div>
         <script src="main.js"></script>

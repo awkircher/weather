@@ -211,9 +211,8 @@ const Weather = function() {
         let zipCode;
         if (event != null) { //means this call is happening because a new zip code was entered
             zipCode = event.target[0].value;
-            Zip.set(zipCode);
         } else { //means this call is happening because the page was loaded or auto refresh
-            zipCode = Zip.get();
+            zipCode = Zip.get(); // will return a hardcoded zip if there's nothing in localStorage
         }
         const appId = process.env.KEY;
         const url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&appid=${appId}`
@@ -225,6 +224,7 @@ const Weather = function() {
             weatherData = await response.json();
             if (weatherData.cod == '200') {
                 messEl.textContent="";
+                Zip.set(zipCode); // we can use this the next time the page loads
                 Data.set(weatherData);
                 View.update(true, zipCode); //View should update with localStorage data
             }

@@ -9,11 +9,21 @@ module.exports = {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  resolve: { //polyfill so 'fs' and 'path' are found in the dotenv lib
+  resolve: { 
     fallback: {
       path: require.resolve("path-browserify"),
       fs: require.resolve("path-browserify"),
-      util: require.resolve("util/")
+      util: require.resolve("util/"),
+      url: require.resolve("url/"),
+      http: require.resolve("stream-http"),
+      buffer: require.resolve("buffer/"),
+      stream: require.resolve("stream-browserify"),
+      assert: require.resolve("assert/"),
+      constants: require.resolve("constants-browserify"),
+      crypto: false,
+      https: false,
+      vm: false,
+      os: false,
     }
   },
   plugins: [

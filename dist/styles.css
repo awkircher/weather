@@ -32,8 +32,12 @@ button, input[type=submit] {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 270px;
+    width: 350px;
     flex-wrap: wrap;
+}
+
+#feelsLike::after, #actual::after {
+    content: "\00B0";
 }
 
 #inputContainer {

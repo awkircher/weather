@@ -121,6 +121,7 @@ const View = function() {
         switchText.textContent = (weather.units === 'C') ? "Fahrenheit" : "Celsius"; //button shows opposite of what's in localStorage
         unitSymbol.textContent = (weather.units === 'C') ? "C" : "F"; //display matches what's in localStorage
         setImage(weather.imageId);
+        setBackground(new Date().getHours());
         loader.classList = 'hidden';
         container.classList = '';
     }
@@ -189,7 +190,7 @@ const View = function() {
                 break;
         }
     }
-    return { setBackground, update, showHideForm };
+    return { update, showHideForm };
 }();
 
 const Weather = function() {
@@ -234,9 +235,7 @@ switchButton.addEventListener("click", function() {
     View.update(true, Zip.get());
 });
 
-View.setBackground(new Date().getHours());
 Weather.get(null);
 setInterval(function() {
-    View.setBackground(new Date().getHours());
     Weather.get(null)
 }, 480000); //updates the weather every 8 minutes

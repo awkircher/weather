@@ -122,10 +122,15 @@ const View = function() {
         actual.textContent = data ? `${Math.round(weather.actual)}` : actual.textContent="~";
         description.textContent = data ? `${weather.conditions}` : description.textContent="Unable to show conditions";
         zipEl.textContent = zip;
-        switchText.textContent = (weather.units === 'C') ? "Fahrenheit" : "Celsius"; //button shows opposite of what's in localStorage
-        unitSymbol.textContent = (weather.units === 'C') ? "C" : "F"; //display matches what's in localStorage
-        setImage(weather.imageId);
+        if (weather) {
+            switchText.textContent = (weather.units === 'C') ? "Fahrenheit" : "Celsius"; //button shows opposite of what's in localStorage
+            unitSymbol.textContent = (weather.units === 'C') ? "C" : "F"; //display matches what's in localStorage
+            console.log("finished textContent");
+            setImage(weather.imageId);
+            console.log("finished weather image");
+        }
         setBackground(new Date().getHours());
+        console.log("finished background color");
         loader.classList = 'hidden';
         container.classList = '';
     }
@@ -220,7 +225,11 @@ const Weather = function() {
             }
             else throw weatherData.message;
         } catch(error) {
-            messEl.textContent=`${error}`;
+            if (error == 'city not found') {
+                messEl.textContent=`Oops! We couldn't find zip code ${zipCode}`
+            } else {
+                messEl.textContent=`${error}`;
+            }
             View.update(null, zipCode); //call was bad, View should update with error messages
         }
     };

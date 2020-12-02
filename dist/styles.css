@@ -36,6 +36,10 @@ button, input[type=submit] {
     flex-wrap: wrap;
 }
 
+#message { /*error message div*/
+    margin-top: 8px;
+}
+
 #feelsLike::after, #actual::after {
     content: "\00B0";
 }

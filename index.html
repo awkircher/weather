@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Feels like</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Inter&family=Spectral:ital,wght@0,200;0,400;1,400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div id="loader">
+            <img src="images/sun.gif">
+            <p class="serif little-serif">We're checking the weather...</p>
+        </div>
+        <div id="container" class="hidden">
+            <div id="weatherContainer">
+                <div id="conditions" class="serif little-serif">
+                    <img id="icon">
+                    <span id="description"></span>
+                </div>
+                <div class="serif big-serif">
+                    Feels like 
+                    <span id="feelsLike"></span> <!--this is the number-->
+                    <span id="feelsDeg"></span> <!--this is the units-->
+                </div>
+                <div class="serif little-serif">
+                    Actually 
+                    <span id="actual"></span>
+                </div>
+            </div>
+            <div id="inputContainer">
+                <div id="current" class="sans">
+                    <div>Showing weather for <span id="zip"></span></div>
+                    <div id="message" class="sans">If there's an error...</div>
+                </div>
+                <div id="controls" class="sans">
+                    <button id="change">Change zip code</button>
+                    <button id="switch">Switch to <span id="units"></span></button>
+                </div>
+                <div id="zipCodeForm" class="sans hidden">
+                    <form>
+                        <input type="text" name="zip" pattern="\d{5}" placeholder="Zip code" maxlength="5">
+                        <input type="submit" value="Update zip code">
+                    </form>
+                    <button id="cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <script src="main.js"></script>
+    </body>
+</html>

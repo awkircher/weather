@@ -215,7 +215,7 @@ const Weather = function() {
             zipCode = Zip.get(); // will return a hardcoded zip if there's nothing in localStorage
         }
         const appId = process.env.KEY;
-        const url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&appid=${appId}`
+        const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&appid=${appId}`
         let response;
         let weatherData;
         try {

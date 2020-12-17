@@ -22,7 +22,7 @@ module.exports = {
       assert: require.resolve("assert/"),
       constants: require.resolve("constants-browserify"),
       crypto: false,
-      https: true,
+      https: false,
       vm: false,
       os: false,
     }
